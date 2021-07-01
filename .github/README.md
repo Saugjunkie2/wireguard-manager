@@ -42,7 +42,7 @@ WireGuard is a straightforward yet fast and modern VPN that utilizes state-of-th
 - Docker `Kernel 5.6` or newer
 
 ---
-### 📲 Installation
+### 🐧 Installation
 #### Instance Installation
 Lets first use `curl` and save the file in `/usr/local/bin/`
 ```
@@ -59,9 +59,14 @@ bash /usr/local/bin/wireguard-manager.sh
 
 In your `/etc/wireguard/clients` directory, you will have `.conf` files. These are the peer configuration files. Download them from your WireGuard Interface and connect using your favorite WireGuard Peer.
 
-#### Docker Installation
+#### 🐳 Docker Installation
+Let's download the docker file and construct it from there.
 ```
-docker build -t wireguard https://raw.githubusercontent.com/complexorganizations/wireguard-manager/main/Dockerfile
+docker build -t wireguard-manager https://raw.githubusercontent.com/complexorganizations/wireguard-manager/main/Dockerfile
+```
+Let's start by constructing the docker container and then connecting to it.
+```
+docker run -it --name wireguard-manager-running wireguard-manager
 ```
 
 ---
@@ -208,6 +213,12 @@ Are there any good alternative to self-hosting vpn?
 
 Why is all the code in one place?
 - Consider a remote control, you can have thirty different remotes each doing a different job, or you may have a single remote that does everything.
+
+What is the best way to connect to a running docker container?
+- `docker exec -it wireguard-manager-running /bin/bash`
+
+Why is `kernel 5.6` or above only required for Docker?
+- Wireguard requires kernel 5.6 or above to install due to linux headers, and we can't install kernel headers on the host OS using the script.
 
 Official Links
 - Homepage: https://www.wireguard.com
