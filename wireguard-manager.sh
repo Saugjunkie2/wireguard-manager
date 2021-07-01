@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://github.com/saugjunkie/wireguard-manager
+# https://github.com/complexorganizations/wireguard-manager
 
 # Require script to be run as root
 function super-user-check() {
@@ -108,7 +108,7 @@ WIREGUARD_ADD_PEER_CONFIG="${WIREGUARD_PATH}/${WIREGUARD_PUB_NIC}-add-peer.conf"
 WIREGUARD_MANAGER="${WIREGUARD_PATH}/wireguard-manager"
 WIREGUARD_INTERFACE="${WIREGUARD_PATH}/wireguard-interface"
 WIREGUARD_PEER="${WIREGUARD_PATH}/wireguard-peer"
-WIREGUARD_MANAGER_UPDATE="https://raw.githubusercontent.com/saugjunkie/wireguard-manager/main/wireguard-manager.sh"
+WIREGUARD_MANAGER_UPDATE="https://raw.githubusercontent.com/complexorganizations/wireguard-manager/main/wireguard-manager.sh"
 SYSTEM_BACKUP_PATH="/var/backups"
 WIREGUARD_CONFIG_BACKUP="${SYSTEM_BACKUP_PATH}/wireguard-manager.zip"
 WIREGUARD_OLD_BACKUP="${SYSTEM_BACKUP_PATH}/OLD_WIREGUARD_FILES"
@@ -122,7 +122,7 @@ UNBOUND_CONFIG="${UNBOUND_ROOT}/unbound.conf"
 UNBOUND_ROOT_HINTS="${UNBOUND_ROOT}/root.hints"
 UNBOUND_ANCHOR="/var/lib/unbound/root.key"
 UNBOUND_ROOT_SERVER_CONFIG_URL="https://www.internic.net/domain/named.cache"
-UNBOUND_CONFIG_HOST_URL="https://raw.githubusercontent.com/saugjunkie/unbound-manager/bestforme/configs/host"
+UNBOUND_CONFIG_HOST_URL="https://raw.githubusercontent.com/complexorganizations/unbound-manager/main/configs/host"
 UNBOUND_CONFIG_HOST="${UNBOUND_ROOT}/unbound.conf.d/host.conf"
 UNBOUND_CONFIG_HOST_TMP="/tmp/host"
 
