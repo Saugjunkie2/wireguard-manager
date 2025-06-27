@@ -927,25 +927,31 @@ if [ ! -f "${WIREGUARD_CONFIG}" ]; then
           apt-get install wireguard qrencode haveged ifupdown resolvconf -y
         elif { [ "${DISTRO}" == "debian" ] || [ "${DISTRO}" == "kali" ]; }; then
           apt-get update
-          if [ ! -f "/etc/apt/sources.list.d/unstable.list" ]; then
-            echo "deb http://deb.debian.org/debian/ unstable main" >>/etc/apt/sources.list.d/unstable.list
+          DEBIAN_MAJOR_VERSION="${DISTRO_VERSION%%.*}"
+          if [[ "${DEBIAN_MAJOR_VERSION}" =~ ^[0-9]+$ ]] && [ "${DEBIAN_MAJOR_VERSION}" -lt 11 ]; then
+            if [ ! -f "/etc/apt/sources.list.d/unstable.list" ]; then
+              echo "deb http://deb.debian.org/debian/ unstable main" >>/etc/apt/sources.list.d/unstable.list
+            fi
+            if [ ! -f "/etc/apt/preferences.d/limit-unstable" ]; then
+              printf "Package: *\nPin: release a=unstable\nPin-Priority: 90\n" >>/etc/apt/preferences.d/limit-unstable
+            fi
+            apt-get update
           fi
-          if [ ! -f "/etc/apt/preferences.d/limit-unstable" ]; then
-            printf "Package: *\nPin: release a=unstable\nPin-Priority: 90\n" >>/etc/apt/preferences.d/limit-unstable
-          fi
-          apt-get update
           apt-get install wireguard qrencode haveged ifupdown resolvconf -y
         elif [ "${DISTRO}" == "raspbian" ]; then
           apt-get update
           apt-get install dirmngr -y
           apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
-          if [ ! -f "/etc/apt/sources.list.d/unstable.list" ]; then
-            echo "deb http://deb.debian.org/debian/ unstable main" >>/etc/apt/sources.list.d/unstable.list
+          RASPBIAN_MAJOR_VERSION="${DISTRO_VERSION%%.*}"
+          if [[ "${RASPBIAN_MAJOR_VERSION}" =~ ^[0-9]+$ ]] && [ "${RASPBIAN_MAJOR_VERSION}" -lt 11 ]; then
+            if [ ! -f "/etc/apt/sources.list.d/unstable.list" ]; then
+              echo "deb http://deb.debian.org/debian/ unstable main" >>/etc/apt/sources.list.d/unstable.list
+            fi
+            if [ ! -f "/etc/apt/preferences.d/limit-unstable" ]; then
+              printf "Package: *\nPin: release a=unstable\nPin-Priority: 90\n" >>/etc/apt/preferences.d/limit-unstable
+            fi
+            apt-get update
           fi
-          if [ ! -f "/etc/apt/preferences.d/limit-unstable" ]; then
-            printf "Package: *\nPin: release a=unstable\nPin-Priority: 90\n" >>/etc/apt/preferences.d/limit-unstable
-          fi
-          apt-get update
           apt-get install wireguard qrencode haveged ifupdown resolvconf -y
         elif { [ "${DISTRO}" == "arch" ] || [ "${DISTRO}" == "archarm" ] || [ "${DISTRO}" == "manjaro" ]; }; then
           pacman -Syu --noconfirm --needed haveged qrencode openresolv wireguard-tools
@@ -1376,11 +1382,14 @@ PublicKey = ${SERVER_PUBKEY}" >>${WIREGUARD_CLIENT_PATH}/"${NEW_CLIENT_NAME}"-${
               yum remove wireguard qrencode haveged -y
             elif { [ "${DISTRO}" == "debian" ] || [ "${DISTRO}" == "kali" ]; }; then
               apt-get remove --purge wireguard qrencode -y
-              if [ -f "/etc/apt/sources.list.d/unstable.list" ]; then
-                rm -f /etc/apt/sources.list.d/unstable.list
-              fi
-              if [ -f "/etc/apt/preferences.d/limit-unstable" ]; then
-                rm -f /etc/apt/preferences.d/limit-unstable
+              DEBIAN_MAJOR_VERSION="${DISTRO_VERSION%%.*}"
+              if [[ "${DEBIAN_MAJOR_VERSION}" =~ ^[0-9]+$ ]] && [ "${DEBIAN_MAJOR_VERSION}" -lt 11 ]; then
+                if [ -f "/etc/apt/sources.list.d/unstable.list" ]; then
+                  rm -f /etc/apt/sources.list.d/unstable.list
+                fi
+                if [ -f "/etc/apt/preferences.d/limit-unstable" ]; then
+                  rm -f /etc/apt/preferences.d/limit-unstable
+                fi
               fi
             elif { [ "${DISTRO}" == "pop" ] || [ "${DISTRO}" == "linuxmint" ]; }; then
               apt-get remove --purge wireguard qrencode haveged -y
@@ -1396,11 +1405,14 @@ PublicKey = ${SERVER_PUBKEY}" >>${WIREGUARD_CLIENT_PATH}/"${NEW_CLIENT_NAME}"-${
             elif [ "${DISTRO}" == "raspbian" ]; then
               apt-key del 04EE7237B7D453EC
               apt-get remove --purge wireguard qrencode haveged dirmngr -y
-              if [ -f "/etc/apt/sources.list.d/unstable.list" ]; then
-                rm -f /etc/apt/sources.list.d/unstable.list
-              fi
-              if [ -f "/etc/apt/preferences.d/limit-unstable" ]; then
-                rm -f /etc/apt/preferences.d/limit-unstable
+              RASPBIAN_MAJOR_VERSION="${DISTRO_VERSION%%.*}"
+              if [[ "${RASPBIAN_MAJOR_VERSION}" =~ ^[0-9]+$ ]] && [ "${RASPBIAN_MAJOR_VERSION}" -lt 11 ]; then
+                if [ -f "/etc/apt/sources.list.d/unstable.list" ]; then
+                  rm -f /etc/apt/sources.list.d/unstable.list
+                fi
+                if [ -f "/etc/apt/preferences.d/limit-unstable" ]; then
+                  rm -f /etc/apt/preferences.d/limit-unstable
+                fi
               fi
             elif { [ "${DISTRO}" == "arch" ] || [ "${DISTRO}" == "archarm" ] || [ "${DISTRO}" == "manjaro" ]; }; then
               pacman -Rs --noconfirm wireguard-tools qrencode haveged
